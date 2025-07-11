@@ -1,12 +1,72 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Header from "./Header";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { validateEmail, validatePassword } from "../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState();
+  const [passwordError, setPasswordError] = useState();
+  const [loginError, setLoginError] = useState();
+  const email = useRef();
+  const password = useRef();
+
   const handleToggle = () => {
     setIsLoginForm(!isLoginForm);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const emailErrormessage = validateEmail(email.current.value);
+    const passWordErrorMessage = validatePassword(password.current.value);
+    console.log(emailErrormessage, passWordErrorMessage);
+    setEmailError(emailErrormessage);
+    setPasswordError(passWordErrorMessage);
+
+    if (emailErrormessage || passWordErrorMessage) {
+      console.log("HELLO");
+      return;
+    }
+    if (!isLoginForm) {
+      // SignUp Form
+      console.log("In Signup: ", isLoginForm);
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log("Signed Up user: ", user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+        });
+    } else {
+      //Login Form
+      console.log("In login: ", isLoginForm);
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log("Logged in user: ", user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+          setLoginError("User does not exist. Please Signup First");
+        });
+    }
   };
 
   return (
@@ -18,7 +78,10 @@ const Login = () => {
           alt="background"
         />
       </div>
-      <form className="absolute w-4/12 p-8 bg-black/80 text-white my-28 mx-auto right-0 left-0 rounded-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="absolute w-3/12 p-8 bg-black/80 text-white my-28 mx-auto right-0 left-0 rounded-lg"
+      >
         <h1 className="p-4 my-4 text-3xl font-bold">
           {isLoginForm ? "Sign In" : "Sign Up"}
         </h1>
@@ -26,19 +89,28 @@ const Login = () => {
           <input
             type="text"
             placeholder="Full Name"
-            className="p-4 my-2 bg-gray-700/40 w-full rounded-sm"
+            className="p-4 my-2 bg-gray-700/40 w-full rounded-sm border border-white/50"
           />
+        )}
+        {loginError && (
+          <p className="bg-yellow-500 text-black rounded-md p-4 my-6">
+            Sorry, we can't find an account with this email address. Please try
+            again or create a new account.
+          </p>
         )}
         <input
           type="text"
+          ref={email}
           placeholder="Email"
-          className="p-4 my-2 bg-gray-700/40 w-full rounded-sm"
+          className="p-4 my-2 bg-gray-700/40 w-full rounded-sm border border-white/50"
         />
+        {emailError && <p className="text-red-700 text-sm">{emailError}</p>}
         <div className="relative w-full">
           <input
             type={showPassword ? "text" : "password"}
+            ref={password}
             placeholder="Password"
-            className="p-4 my-2 bg-gray-700/40 w-full rounded-sm"
+            className="p-4 my-2 bg-gray-700/40 w-full rounded-sm border border-white/50"
           />
           <button
             type="button"
@@ -48,7 +120,10 @@ const Login = () => {
             {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
           </button>
         </div>
-        <button className="p-4 my-4 bg-red-700 w-full rounded-sm">
+        {passwordError && (
+          <p className="text-red-700 text-sm">{passwordError}</p>
+        )}
+        <button className="p-4 my-4 bg-red-700 w-full rounded-sm" type="submit">
           {isLoginForm ? "Sign In" : "Sign Up"}
         </button>
 
