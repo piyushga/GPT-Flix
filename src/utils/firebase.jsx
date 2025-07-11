@@ -9,7 +9,7 @@ import { getAuth } from "firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA5rUkWyATG4-dmsX0OJNYZDHPzpHDyG7c",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "gptflix-21.firebaseapp.com",
   projectId: "gptflix-21",
   storageBucket: "gptflix-21.firebasestorage.app",
