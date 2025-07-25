@@ -3,9 +3,14 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
+import { useEffect } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
 
   const user = useSelector((store) => store.user);
@@ -14,13 +19,37 @@ const Header = () => {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        navigate("/");
       })
       .catch((error) => {
         // An error happened.
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        // const uid = user.uid;
+        console.log("User in Body: ", user);
+        const userData = {
+          id: user.uid,
+          mail: user.email,
+          name: user.displayName,
+        };
+        dispatch(addUser(userData));
+        navigate("/browse");
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        dispatch(removeUser());
+        navigate("/");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
   return (
     <div>
       {/* <img
