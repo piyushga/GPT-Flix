@@ -8,3 +8,11 @@ export const API_OPTIONS = {
 };
 
 export const MOVIE_IMG_CDN_URL = "https://image.tmdb.org/t/p/w500";
+
+export const BG_URL =
+  "https://assets.nflxext.com/ffe/siteui/vlv3/7d2359a4-434f-4efa-9ff3-e9d38a8bde7f/web/DE-en-20250707-TRIFECTA-perspective_44f54baf-670a-415f-ae97-449732d16b5d_large.jpg";
+
+export const languageTranslation = [
+  { identifier: "en", name: "English" },
+  { identifier: "de", name: "German" },
+];

@@ -10,6 +10,7 @@ import {
 import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { BG_URL } from "../utils/constant";
 
 const Login = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
@@ -102,10 +103,7 @@ const Login = () => {
     <div>
       <Header />
       <div className="absolute">
-        <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/7d2359a4-434f-4efa-9ff3-e9d38a8bde7f/web/DE-en-20250707-TRIFECTA-perspective_44f54baf-670a-415f-ae97-449732d16b5d_large.jpg"
-          alt="background"
-        />
+        <img src={BG_URL} alt="background" />
       </div>
       <form
         onSubmit={handleSubmit}

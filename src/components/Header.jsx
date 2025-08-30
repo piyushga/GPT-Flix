@@ -7,11 +7,15 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useEffect } from "react";
+import { toggleGptSearchView } from "../utils/gptSlice";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
+
+  console.log("Before click, GPT search =", showGptSearch);
 
   const user = useSelector((store) => store.user);
   console.log("User in Header: ", user);
@@ -24,6 +28,11 @@ const Header = () => {
         // An error happened.
         console.log(error);
       });
+  };
+
+  const handleGptSearchClick = () => {
+    dispatch(toggleGptSearchView());
+    console.log("After click, GPT search =", !showGptSearch);
   };
 
   useEffect(() => {
@@ -50,6 +59,7 @@ const Header = () => {
     });
     return () => unsubscribe();
   }, []);
+
   return (
     <div>
       {/* <img
@@ -64,16 +74,23 @@ const Header = () => {
         </div>
       )}
       {user && (
-        <div>
+        <div className="absolute top-4 right-4 flex items-center gap-3 z-40">
+          <select></select>
           <button
-            className="text-white bg-red-700 absolute top-4 right-4 z-10 px-2 py-1 rounded"
+            className="text-white bg-purple-600 px-2 py-1 rounded"
+            onClick={handleGptSearchClick}
+          >
+            GPT Search
+          </button>
+          <span className=" text-white drop-shadow-xl font-medium">
+            Hello {user?.name}
+          </span>
+          <button
+            className="text-white bg-red-700 px-2 py-1 rounded"
             onClick={handleSignOut}
           >
             Sign Out
           </button>
-          <span className="absolute top-6 right-30 text-black font-medium z-20">
-            Hello {user?.name}
-          </span>
         </div>
       )}
     </div>
