@@ -8,13 +8,14 @@ const translations = {
     password_hint:
       "Password must be at least 8 characters and include one uppercase, one lowercase, one number, and one special character.",
     more_info: "More Info",
-    play_now: "Play Now",
+    play: "Play",
     login: "Login",
     now_playing: "Now Playing Movies",
     upcoming: "Upcoming",
     popular: "Popular",
     trending: "Trending",
     hello: "Hello",
+    homepage: "Homepage",
   },
 
   de: {
@@ -26,13 +27,14 @@ const translations = {
     password_hint:
       "Das Passwort muss mindestens 8 Zeichen lang sein und einen Großbuchstaben, einen Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten.",
     more_info: "Mehr Infos",
-    play_now: "Jetzt abspielen",
+    play: "Abspielen",
     login: "Anmelden",
     now_playing: "Aktuell laufende Filme",
     upcoming: "Demnächst",
     popular: "Beliebt",
     trending: "Trends",
     hello: "Hallo",
+    homepage: "Startseite",
   },
 };
 

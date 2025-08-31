@@ -8,12 +8,16 @@ import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useEffect } from "react";
 import { toggleGptSearchView } from "../utils/gptSlice";
+import { languageTranslation } from "../utils/constant";
+import { changeLanguage } from "../utils/configSlice";
+import translations from "../utils/translations";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
+  const langKey = useSelector((store) => store.config.lang);
 
   console.log("Before click, GPT search =", showGptSearch);
 
@@ -33,6 +37,10 @@ const Header = () => {
   const handleGptSearchClick = () => {
     dispatch(toggleGptSearchView());
     console.log("After click, GPT search =", !showGptSearch);
+  };
+
+  const handleLanguageChange = (e) => {
+    dispatch(changeLanguage(e.target.value));
   };
 
   useEffect(() => {
@@ -75,21 +83,32 @@ const Header = () => {
       )}
       {user && (
         <div className="absolute top-4 right-4 flex items-center gap-3 z-40">
-          <select></select>
+          <select
+            className="p-1 bg-gray-900 text-white rounded"
+            onChange={handleLanguageChange}
+          >
+            {languageTranslation.map((lang) => (
+              <option key={lang.identifier} value={lang.identifier}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
           <button
             className="text-white bg-purple-600 px-2 py-1 rounded"
             onClick={handleGptSearchClick}
           >
-            GPT Search
+            {showGptSearch
+              ? translations[langKey].homepage
+              : translations[langKey].gpt_search}
           </button>
           <span className=" text-white drop-shadow-xl font-medium">
-            Hello {user?.name}
+            {translations[langKey].hello} {user?.name}
           </span>
           <button
             className="text-white bg-red-700 px-2 py-1 rounded"
             onClick={handleSignOut}
           >
-            Sign Out
+            {translations[langKey].sign_out}
           </button>
         </div>
       )}

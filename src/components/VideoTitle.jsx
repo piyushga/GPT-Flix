@@ -1,7 +1,10 @@
 import { RxInfoCircled } from "react-icons/rx";
 import { FaPlay } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import translations from "../utils/translations";
 
 const VideoTitle = ({ title, overview }) => {
+  const langKey = useSelector((store) => store.config.lang);
   return (
     <div
       className="
@@ -26,12 +29,12 @@ const VideoTitle = ({ title, overview }) => {
       <div className="flex flex-wrap gap-3">
         <button className="flex items-center gap-2 py-2 px-6 sm:px-8 lg:px-10 text-base sm:text-lg bg-white text-black rounded-sm hover:bg-white/80">
           <FaPlay />
-          Play
+          {translations[langKey].play}
         </button>
 
         <button className="flex items-center gap-2 bg-gray-600/60 text-base sm:text-lg font-bold py-2 px-6 sm:px-8 lg:px-10 rounded-md">
           <RxInfoCircled />
-          More info
+          {translations[langKey].more_info}
         </button>
       </div>
     </div>
